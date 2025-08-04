@@ -1,0 +1,67 @@
+{
+	"Layers":{
+		"uid_9":{
+			"op": "CONV2D",
+			"inputs": [ "datainput_0:out0", "datainput_1:out0", "datainput_2:out0" ],
+			"inut_shape": [ [ 28, 28, 1, 1 ],[ 5, 5, 1, 10 ],[ 10 ] ],
+			"outputs": [ "out0" ],
+			"output_shape": [ [ 24, 24, 10, 1 ] ]
+		},
+		"uid_8":{
+			"op": "RELU",
+			"inputs": [ "@uid_9:out0" ],
+			"inut_shape": [ [ 24, 24, 10, 1 ] ],
+			"outputs": [ "out0" ],
+			"output_shape": [ [ 24, 24, 10, 1 ] ]
+		},
+		"uid_7":{
+			"op": "POOL",
+			"inputs": [ "@uid_8:out0" ],
+			"inut_shape": [ [ 24, 24, 10, 1 ] ],
+			"outputs": [ "out0" ],
+			"output_shape": [ [ 12, 12, 10, 1 ] ]
+		},
+		"uid_6":{
+			"op": "CONV2D",
+			"inputs": [ "@uid_7:out0", "datainput_1:out0", "datainput_2:out0" ],
+			"inut_shape": [ [ 12, 12, 10, 1 ],[ 5, 5, 10, 20 ],[ 20 ] ],
+			"outputs": [ "out0" ],
+			"output_shape": [ [ 8, 8, 20, 1 ] ]
+		},
+		"uid_5":{
+			"op": "RELU",
+			"inputs": [ "@uid_6:out0" ],
+			"inut_shape": [ [ 8, 8, 20, 1 ] ],
+			"outputs": [ "out0" ],
+			"output_shape": [ [ 8, 8, 20, 1 ] ]
+		},
+		"uid_4":{
+			"op": "POOL",
+			"inputs": [ "@uid_5:out0" ],
+			"inut_shape": [ [ 8, 8, 20, 1 ] ],
+			"outputs": [ "out0" ],
+			"output_shape": [ [ 4, 4, 20, 1 ] ]
+		},
+		"uid_3":{
+			"op": "RESHAPE2",
+			"inputs": [ "@uid_4:out0" ],
+			"inut_shape": [ [ 4, 4, 20, 1 ] ],
+			"outputs": [ "out0" ],
+			"output_shape": [ [ 320, 1 ] ]
+		},
+		"uid_2":{
+			"op": "FCL",
+			"inputs": [ "@uid_3:out0", "datainput_1:out0", "datainput_2:out0" ],
+			"inut_shape": [ [ 320, 1 ],[ 320, 50 ],[ 50 ] ],
+			"outputs": [ "out0" ],
+			"output_shape": [ [ 50, 1 ] ]
+		},
+		"uid_1":{
+			"op": "FCL",
+			"inputs": [ "@uid_2:out0", "datainput_1:out0", "datainput_2:out0" ],
+			"inut_shape": [ [ 50, 1 ],[ 50, 10 ],[ 10 ] ],
+			"outputs": [ "out0" ],
+			"output_shape": [ [ 10, 1 ] ]
+		}
+	}
+}

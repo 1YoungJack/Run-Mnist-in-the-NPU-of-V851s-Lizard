@@ -1,0 +1,323 @@
+{
+    "MetaData": {
+        "Name": "main_graph",
+        "AcuityVersion": "6",
+        "Platform": "caffe",
+        "Org_Platform": "onnx"
+    },
+    "InputMeta": {
+        "databases": [
+            {
+                "path": "dataset.txt",
+                "type": "TEXT",
+                "ports": [
+                    {
+                        "lid": "input_10",
+                        "category": "image",
+                        "dtype": "float32",
+                        "sparse": false,
+                        "tensor_name": null,
+                        "layout": "nchw",
+                        "shape": [
+                            1,
+                            1,
+                            28,
+                            28
+                        ],
+                        "fitting": "scale",
+                        "preprocess": {
+                            "reverse_channel": true,
+                            "mean": [
+                                0.4242
+                            ],
+                            "scale": 3.2457,
+                            "preproc_node_params": {
+                                "add_preproc_node": false,
+                                "preproc_type": "IMAGE_GRAY",
+                                "preproc_image_size": [
+                                    28,
+                                    28
+                                ],
+                                "preproc_crop": {
+                                    "enable_preproc_crop": false,
+                                    "crop_rect": [
+                                        0,
+                                        0,
+                                        28,
+                                        28
+                                    ]
+                                },
+                                "preproc_perm": [
+                                    0,
+                                    1,
+                                    2,
+                                    3
+                                ],
+                                "shape": [
+                                    1,
+                                    1,
+                                    28,
+                                    28
+                                ],
+                                "layout": "nchw"
+                            }
+                        },
+                        "redirect_to_output": false
+                    }
+                ]
+            }
+        ]
+    },
+    "postprocess": {
+        "acuity_postprocs": {
+            "print_topn": {
+                "topn": 5
+            },
+            "dump_results": {
+                "file_type": "TENSOR"
+            }
+        },
+        "app_postprocs": [
+            {
+                "lid": "attach_Gemm_/fc/fc.1/Gemm/out0_0",
+                "postproc_params": {
+                    "add_postproc_node": false,
+                    "perm": [
+                        0,
+                        1
+                    ],
+                    "force_float32": true
+                }
+            }
+        ]
+    },
+    "Layers": {
+        "attach_Gemm_/fc/fc.1/Gemm/out0_0": {
+            "name": "attach_Gemm_/fc/fc.1/Gemm/out0",
+            "op": "output",
+            "parameters": {},
+            "inputs": [
+                "@Gemm_/fc/fc.1/Gemm_1:out0"
+            ],
+            "outputs": [
+                "out0"
+            ]
+        },
+        "Gemm_/fc/fc.1/Gemm_1": {
+            "name": "Gemm_/fc/fc.1/Gemm",
+            "op": "fullconnect",
+            "parameters": {
+                "weights": 10,
+                "bias": true,
+                "regularize": false,
+                "axis": 0
+            },
+            "inputs": [
+                "@Gemm_/fc/fc.0/Gemm_2:out0"
+            ],
+            "outputs": [
+                "out0"
+            ]
+        },
+        "Gemm_/fc/fc.0/Gemm_2": {
+            "name": "Gemm_/fc/fc.0/Gemm",
+            "op": "fullconnect",
+            "parameters": {
+                "weights": 50,
+                "bias": true,
+                "regularize": false,
+                "axis": 0
+            },
+            "inputs": [
+                "@Reshape_/Reshape_3:out0"
+            ],
+            "outputs": [
+                "out0"
+            ]
+        },
+        "Reshape_/Reshape_3": {
+            "name": "Reshape_/Reshape",
+            "op": "reshape",
+            "parameters": {
+                "shape": [
+                    -1,
+                    1
+                ]
+            },
+            "inputs": [
+                "@MaxPool_/conv2/conv2.2/MaxPool_4:out0"
+            ],
+            "outputs": [
+                "out0"
+            ]
+        },
+        "MaxPool_/conv2/conv2.2/MaxPool_4": {
+            "name": "MaxPool_/conv2/conv2.2/MaxPool",
+            "op": "pooling",
+            "parameters": {
+                "padding": "VALID",
+                "type": "MAX",
+                "ksize_h": 2,
+                "ksize_w": 2,
+                "stride_h": 2,
+                "stride_w": 2,
+                "pad_h": 0,
+                "pad_w": 0,
+                "round_type": "floor",
+                "pad_method": "padding_const",
+                "pad": [
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "inputs": [
+                "@Relu_/conv2/conv2.1/Relu_5:out0"
+            ],
+            "outputs": [
+                "out0"
+            ]
+        },
+        "Relu_/conv2/conv2.1/Relu_5": {
+            "name": "Relu_/conv2/conv2.1/Relu",
+            "op": "relu",
+            "inputs": [
+                "@Conv_/conv2/conv2.0/Conv_6:out0"
+            ],
+            "outputs": [
+                "out0"
+            ]
+        },
+        "Conv_/conv2/conv2.0/Conv_6": {
+            "name": "Conv_/conv2/conv2.0/Conv",
+            "op": "convolution",
+            "parameters": {
+                "weights": 20,
+                "padding": "VALID",
+                "bias": true,
+                "group_number": 1,
+                "regularize": false,
+                "ksize_h": 5,
+                "ksize_w": 5,
+                "stride_h": 1,
+                "stride_w": 1,
+                "pad_h": 0,
+                "pad_w": 0,
+                "dilation": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "pad_method": "padding_const",
+                "pad": [
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "inputs": [
+                "@MaxPool_/conv1/conv1.2/MaxPool_7:out0"
+            ],
+            "outputs": [
+                "out0"
+            ]
+        },
+        "MaxPool_/conv1/conv1.2/MaxPool_7": {
+            "name": "MaxPool_/conv1/conv1.2/MaxPool",
+            "op": "pooling",
+            "parameters": {
+                "padding": "VALID",
+                "type": "MAX",
+                "ksize_h": 2,
+                "ksize_w": 2,
+                "stride_h": 2,
+                "stride_w": 2,
+                "pad_h": 0,
+                "pad_w": 0,
+                "round_type": "floor",
+                "pad_method": "padding_const",
+                "pad": [
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "inputs": [
+                "@Relu_/conv1/conv1.1/Relu_8:out0"
+            ],
+            "outputs": [
+                "out0"
+            ]
+        },
+        "Relu_/conv1/conv1.1/Relu_8": {
+            "name": "Relu_/conv1/conv1.1/Relu",
+            "op": "relu",
+            "inputs": [
+                "@Conv_/conv1/conv1.0/Conv_9:out0"
+            ],
+            "outputs": [
+                "out0"
+            ]
+        },
+        "Conv_/conv1/conv1.0/Conv_9": {
+            "name": "Conv_/conv1/conv1.0/Conv",
+            "op": "convolution",
+            "parameters": {
+                "weights": 10,
+                "padding": "VALID",
+                "bias": true,
+                "group_number": 1,
+                "regularize": false,
+                "ksize_h": 5,
+                "ksize_w": 5,
+                "stride_h": 1,
+                "stride_w": 1,
+                "pad_h": 0,
+                "pad_w": 0,
+                "dilation": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "pad_method": "padding_const",
+                "pad": [
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "inputs": [
+                "@input_10:out0"
+            ],
+            "outputs": [
+                "out0"
+            ]
+        },
+        "input_10": {
+            "name": "input",
+            "op": "input",
+            "parameters": {
+                "size": "",
+                "channels": 1,
+                "shape": [
+                    1,
+                    1,
+                    28,
+                    28
+                ],
+                "type": "float32"
+            },
+            "inputs": [],
+            "outputs": [
+                "out0"
+            ]
+        }
+    },
+    "quantize_info": {}
+}
