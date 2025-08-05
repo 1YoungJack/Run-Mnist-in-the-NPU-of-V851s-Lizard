@@ -1,7 +1,4 @@
 # Run-Mnist-in-the-NPU-of-V851s-Lizard
-
----
-
 ## 仓库结构  
 .  
 ├── MNIST  
